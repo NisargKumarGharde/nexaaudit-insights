@@ -14,18 +14,52 @@ const Index = () => {
     { id: "AUD-2837", document: "Expense_Sheet_April.pdf", type: "pdf", date: "May 3, 2026", value: "$48,720", anomalies: 0, status: "Processing" },
   ]);
 
-  const handleUploadComplete = (filename: string) => {
+  const handleUploadComplete = (filename: string, data: any) => {
+
     const isPdf = filename.toLowerCase().endsWith(".pdf");
+
+    
+
+    // Safely extract the AI results from our Go backend response
+
+    const aiResults = data?.ai_results || {};
+
+    // Format the Gemini total amount as currency
+
+    const formattedAmount = aiResults.total_amount 
+
+      ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(aiResults.total_amount)
+
+      : "$—";
+
     const newRow: AuditRow = {
-      id: `AUD-${Math.floor(2842 + Math.random() * 100)}`,
-      document: filename,
+
+      // Use a short ID for the UI, but you could use data.document_id here!
+
+      id: `AUD-${Math.floor(2842 + Math.random() * 100)}`, 
+
+      // Replace the filename with the AI-detected Vendor Name if it exists
+
+      document: aiResults.vendor_name ? `${aiResults.vendor_name} Invoice` : filename,
+
       type: isPdf ? "pdf" : "image",
+
       date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-      value: "$—",
-      anomalies: 0,
-      status: "Processing",
+
+      value: formattedAmount,
+
+      // If Gemini flagged it, show 1 anomaly, otherwise 0
+
+      anomalies: aiResults.is_flagged ? 1 : 0,
+
+      // Update the status pill color based on Gemini's risk assessment
+
+      status: aiResults.is_flagged ? "Flagged" : "Verified", 
+
     };
+
     setAudits((prev) => [newRow, ...prev]);
+
   };
 
   return (
