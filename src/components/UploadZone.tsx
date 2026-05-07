@@ -27,7 +27,7 @@ export const UploadZone = ({ onUploadComplete }: UploadZoneProps) => {
     formData.append("document", file);
 
     try {
-      const res = await fetch("http://localhost:8080/api/v1/upload", {
+      const res = await fetch("http://localhost:8082/api/v1/upload", {
         method: "POST",
         body: formData,
       });
