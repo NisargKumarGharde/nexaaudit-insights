@@ -1,13 +1,4 @@
-import { LayoutDashboard, FileSearch, ShieldAlert, BarChart3, Settings, FileStack, Sparkles } from "lucide-react";
-
-const navItems = [
-  { icon: LayoutDashboard, label: "Dashboard", active: true },
-  { icon: FileStack, label: "Documents" },
-  { icon: FileSearch, label: "Audits" },
-  { icon: ShieldAlert, label: "Anomalies" },
-  { icon: BarChart3, label: "Reports" },
-  { icon: Settings, label: "Settings" },
-];
+import { LayoutDashboard, Sparkles } from "lucide-react";
 
 export const Sidebar = () => {
   return (
@@ -22,19 +13,10 @@ export const Sidebar = () => {
         </div>
       </div>
       <nav className="flex-1 px-3 py-6 space-y-1">
-        {navItems.map((item) => (
-          <button
-            key={item.label}
-            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all ${
-              item.active
-                ? "bg-secondary text-foreground shadow-card"
-                : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-            }`}
-          >
-            <item.icon className="h-4 w-4" />
-            {item.label}
-          </button>
-        ))}
+        <button className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium bg-secondary text-foreground shadow-card">
+          <LayoutDashboard className="h-4 w-4" />
+          Dashboard
+        </button>
       </nav>
       <div className="p-4 m-3 rounded-xl bg-gradient-card border border-border">
         <p className="text-xs font-semibold mb-1">Pro Plan</p>

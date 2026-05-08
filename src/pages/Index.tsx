@@ -1,66 +1,77 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FileStack, DollarSign, ShieldAlert, Search, Bell } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
 import { MetricCard } from "@/components/MetricCard";
 import { UploadZone } from "@/components/UploadZone";
 import { RecentAudits, AuditRow } from "@/components/RecentAudits";
+import { Skeleton } from "@/components/ui/skeleton";
+
+const API_URL = "https://nexaaudit-api.onrender.com/api/v1/dashboard";
+
+interface RecentFile {
+  id: string;
+  file_name: string;
+  status: string;
+  total_amount: number;
+  uploaded_at: string;
+}
+
+interface DashboardData {
+  total_documents: number;
+  total_value: number;
+  anomalies: number;
+  recent_files: RecentFile[];
+}
+
+const formatCurrency = (n: number) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(n ?? 0);
+
+const formatCompact = (n: number) =>
+  new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(n ?? 0);
+
+const mapStatus = (s: string): AuditRow["status"] => {
+  const v = (s || "").toLowerCase();
+  if (v === "flagged") return "Flagged";
+  if (v === "review") return "Review";
+  if (v === "processing") return "Processing";
+  return "Verified";
+};
+
+const mapFiles = (files: RecentFile[] = []): AuditRow[] =>
+  files.map((f) => ({
+    id: f.id,
+    document: f.file_name,
+    type: f.file_name?.toLowerCase().endsWith(".pdf") ? "pdf" : "image",
+    date: f.uploaded_at
+      ? new Date(f.uploaded_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
+      : "—",
+    value: formatCurrency(f.total_amount),
+    anomalies: mapStatus(f.status) === "Flagged" ? 1 : 0,
+    status: mapStatus(f.status),
+  }));
 
 const Index = () => {
-  const [audits, setAudits] = useState<AuditRow[]>([
-    { id: "AUD-2841", document: "Q4_FinancialStatement.pdf", type: "pdf", date: "May 6, 2026", value: "$2,481,920", anomalies: 0, status: "Verified" },
-    { id: "AUD-2840", document: "Invoice_Mar_2026.pdf", type: "pdf", date: "May 5, 2026", value: "$184,500", anomalies: 3, status: "Flagged" },
-    { id: "AUD-2839", document: "Receipt_Vendor_887.png", type: "image", date: "May 5, 2026", value: "$12,400", anomalies: 1, status: "Review" },
-    { id: "AUD-2838", document: "Audit_Report_2025.pdf", type: "pdf", date: "May 4, 2026", value: "$5,920,100", anomalies: 0, status: "Verified" },
-    { id: "AUD-2837", document: "Expense_Sheet_April.pdf", type: "pdf", date: "May 3, 2026", value: "$48,720", anomalies: 0, status: "Processing" },
-  ]);
+  const [data, setData] = useState<DashboardData | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  const handleUploadComplete = (filename: string, data: any) => {
+  const fetchDashboard = useCallback(async () => {
+    try {
+      const res = await fetch(API_URL);
+      if (!res.ok) throw new Error(`Failed: ${res.status}`);
+      const json = (await res.json()) as DashboardData;
+      setData(json);
+    } catch (err) {
+      console.error("Dashboard fetch failed", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
-    const isPdf = filename.toLowerCase().endsWith(".pdf");
+  useEffect(() => {
+    fetchDashboard();
+  }, [fetchDashboard]);
 
-    
-
-    // Safely extract the AI results from our Go backend response
-
-    const aiResults = data?.ai_results || {};
-
-    // Format the Gemini total amount as currency
-
-    const formattedAmount = aiResults.total_amount 
-
-      ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(aiResults.total_amount)
-
-      : "$—";
-
-    const newRow: AuditRow = {
-
-      // Use a short ID for the UI, but you could use data.document_id here!
-
-      id: `AUD-${Math.floor(2842 + Math.random() * 100)}`, 
-
-      // Replace the filename with the AI-detected Vendor Name if it exists
-
-      document: aiResults.vendor_name ? `${aiResults.vendor_name} Invoice` : filename,
-
-      type: isPdf ? "pdf" : "image",
-
-      date: new Date().toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
-
-      value: formattedAmount,
-
-      // If Gemini flagged it, show 1 anomaly, otherwise 0
-
-      anomalies: aiResults.is_flagged ? 1 : 0,
-
-      // Update the status pill color based on Gemini's risk assessment
-
-      status: aiResults.is_flagged ? "Flagged" : "Verified", 
-
-    };
-
-    setAudits((prev) => [newRow, ...prev]);
-
-  };
+  const audits = mapFiles(data?.recent_files);
 
   return (
     <div className="min-h-screen flex bg-background">
@@ -92,38 +103,52 @@ const Index = () => {
 
         <div className="flex-1 p-8 space-y-6 overflow-auto">
           <section className="grid gap-4 md:grid-cols-3">
-            <MetricCard
-              label="Total Documents Processed"
-              value="12,847"
-              change="+8.2%"
-              trend="up"
-              icon={FileStack}
-              accent="primary"
-            />
-            <MetricCard
-              label="Total Value Audited"
-              value="$48.2M"
-              change="+12.5%"
-              trend="up"
-              icon={DollarSign}
-              accent="primary"
-            />
-            <MetricCard
-              label="Anomalies Flagged"
-              value="237"
-              change="-3.4%"
-              trend="down"
-              icon={ShieldAlert}
-              accent="destructive"
-            />
+            {loading || !data ? (
+              <>
+                <Skeleton className="h-[140px] rounded-2xl" />
+                <Skeleton className="h-[140px] rounded-2xl" />
+                <Skeleton className="h-[140px] rounded-2xl" />
+              </>
+            ) : (
+              <>
+                <MetricCard
+                  label="Total Documents Processed"
+                  value={data.total_documents.toLocaleString()}
+                  change="Live"
+                  trend="up"
+                  icon={FileStack}
+                  accent="primary"
+                />
+                <MetricCard
+                  label="Total Value Audited"
+                  value={`$${formatCompact(data.total_value)}`}
+                  change="Live"
+                  trend="up"
+                  icon={DollarSign}
+                  accent="primary"
+                />
+                <MetricCard
+                  label="Anomalies Flagged"
+                  value={data.anomalies.toLocaleString()}
+                  change="Live"
+                  trend={data.anomalies > 0 ? "down" : "up"}
+                  icon={ShieldAlert}
+                  accent="destructive"
+                />
+              </>
+            )}
           </section>
 
           <section>
-            <UploadZone onUploadComplete={handleUploadComplete} />
+            <UploadZone onUploadComplete={() => fetchDashboard()} />
           </section>
 
           <section>
-            <RecentAudits audits={audits} />
+            {loading ? (
+              <Skeleton className="h-[300px] rounded-2xl" />
+            ) : (
+              <RecentAudits audits={audits} />
+            )}
           </section>
         </div>
       </main>
