@@ -79,7 +79,7 @@ const Index = () => {
       <Sidebar />
 
       <main className="flex-1 flex flex-col min-w-0">
-        <header className="flex items-center justify-between px-8 py-5 border-b border-border bg-card/30 backdrop-blur-xl">
+        <header className="relative z-50 flex items-center justify-between px-8 py-5 border-b border-border bg-card/30 backdrop-blur-xl">
           <div>
             <h1 className="text-xl font-bold tracking-tight">Compliance Dashboard</h1>
             <p className="text-xs text-muted-foreground mt-0.5">AI-powered financial audit overview</p>

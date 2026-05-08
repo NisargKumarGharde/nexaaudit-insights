@@ -51,7 +51,7 @@ export const UserAvatar = () => {
         {getInitials(name)}
       </button>
       {open && (
-        <div className="absolute right-0 mt-2 w-64 rounded-xl border border-border bg-card shadow-card p-4 z-50">
+        <div className="absolute right-0 mt-2 w-64 rounded-xl border border-border bg-card shadow-card p-4 z-[100]">
           <label className="text-xs text-muted-foreground flex items-center gap-1.5 mb-2">
             <Pencil className="h-3 w-3" /> Display name
           </label>
