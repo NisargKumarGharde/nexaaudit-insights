@@ -18,13 +18,6 @@ export const Sidebar = () => {
           Dashboard
         </button>
       </nav>
-      <div className="p-4 m-3 rounded-xl bg-gradient-card border border-border">
-        <p className="text-xs font-semibold mb-1">Pro Plan</p>
-        <p className="text-xs text-muted-foreground mb-3">Unlimited audits & priority AI processing</p>
-        <button className="w-full text-xs font-medium py-2 rounded-md bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90 transition">
-          Upgrade
-        </button>
-      </div>
     </aside>
   );
 };
