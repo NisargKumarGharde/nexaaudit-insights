@@ -5,6 +5,7 @@ import { MetricCard } from "@/components/MetricCard";
 import { UploadZone } from "@/components/UploadZone";
 import { RecentAudits, AuditRow } from "@/components/RecentAudits";
 import { Skeleton } from "@/components/ui/skeleton";
+import { UserAvatar } from "@/components/UserAvatar";
 
 const API_URL = "https://nexaaudit-api.onrender.com/api/v1/dashboard";
 
@@ -95,9 +96,7 @@ const Index = () => {
               <Bell className="h-4 w-4" />
               <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary" />
             </button>
-            <div className="h-9 w-9 rounded-full bg-gradient-primary flex items-center justify-center text-sm font-semibold text-primary-foreground">
-              JD
-            </div>
+            <UserAvatar />
           </div>
         </header>
 
