@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { FileStack, DollarSign, ShieldAlert, Search } from "lucide-react";
+import { FileStack, DollarSign, ShieldAlert } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
 import { MetricCard } from "@/components/MetricCard";
 import { UploadZone } from "@/components/UploadZone";
@@ -54,7 +54,6 @@ const mapFiles = (files: RecentFile[] = []): AuditRow[] =>
 const Index = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
 
   const fetchDashboard = useCallback(async () => {
     try {
@@ -73,9 +72,7 @@ const Index = () => {
     fetchDashboard();
   }, [fetchDashboard]);
 
-  const allAudits = mapFiles(data?.recent_files);
-  const q = search.trim().toLowerCase();
-  const audits = q ? allAudits.filter((a) => a.document.toLowerCase().includes(q)) : allAudits;
+  const audits = mapFiles(data?.recent_files);
 
   return (
     <div className="min-h-screen flex bg-background">
@@ -88,15 +85,6 @@ const Index = () => {
             <p className="text-xs text-muted-foreground mt-0.5">AI-powered financial audit overview</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="relative hidden md:block">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Search by file name..."
-                className="pl-9 pr-4 py-2 bg-secondary rounded-lg text-sm w-64 border border-transparent focus:border-primary/50 focus:outline-none transition"
-              />
-            </div>
             <UserAvatar />
           </div>
         </header>
