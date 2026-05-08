@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from "react";
-import { FileStack, DollarSign, ShieldAlert, Search, Bell } from "lucide-react";
+import { FileStack, DollarSign, ShieldAlert, Search } from "lucide-react";
 import { Sidebar } from "@/components/Sidebar";
 import { MetricCard } from "@/components/MetricCard";
 import { UploadZone } from "@/components/UploadZone";
@@ -92,10 +92,6 @@ const Index = () => {
                 className="pl-9 pr-4 py-2 bg-secondary rounded-lg text-sm w-64 border border-transparent focus:border-primary/50 focus:outline-none transition"
               />
             </div>
-            <button className="relative p-2 rounded-lg bg-secondary hover:bg-secondary/70 transition">
-              <Bell className="h-4 w-4" />
-              <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-primary" />
-            </button>
             <UserAvatar />
           </div>
         </header>
