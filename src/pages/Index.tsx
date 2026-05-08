@@ -54,6 +54,7 @@ const mapFiles = (files: RecentFile[] = []): AuditRow[] =>
 const Index = () => {
   const [data, setData] = useState<DashboardData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
 
   const fetchDashboard = useCallback(async () => {
     try {
@@ -72,7 +73,9 @@ const Index = () => {
     fetchDashboard();
   }, [fetchDashboard]);
 
-  const audits = mapFiles(data?.recent_files);
+  const allAudits = mapFiles(data?.recent_files);
+  const q = search.trim().toLowerCase();
+  const audits = q ? allAudits.filter((a) => a.document.toLowerCase().includes(q)) : allAudits;
 
   return (
     <div className="min-h-screen flex bg-background">
@@ -88,7 +91,9 @@ const Index = () => {
             <div className="relative hidden md:block">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
-                placeholder="Search audits..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by file name..."
                 className="pl-9 pr-4 py-2 bg-secondary rounded-lg text-sm w-64 border border-transparent focus:border-primary/50 focus:outline-none transition"
               />
             </div>
