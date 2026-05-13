@@ -41,7 +41,7 @@ npm install
 
 ### 3. Environment Variables
 To run this locally, you must have the Go Backend running on port 8082. Create a .env file in the root directory:
-```
+```env
 VITE_API_URL=http://localhost:8082/api/v1
 ```
 
