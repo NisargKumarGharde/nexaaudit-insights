@@ -30,7 +30,7 @@ My primary engineering focus on this frontend was strictly integration: managing
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/NisargKumarGharde/nexaaudit-insights.git](https://github.com/NisargKumarGharde/nexaaudit-insights.git)
+git clone https://github.com/NisargKumarGharde/nexaaudit-insights.git
 cd nexaaudit-insights
 ```
 
