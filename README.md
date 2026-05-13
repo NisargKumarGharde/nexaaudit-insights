@@ -1,10 +1,11 @@
 # NexaAudit - Frontend Dashboard
 
-[![Live Demo](https://img.shields.io/badge/Live_Demo-Online-success?style=for-the-badge)](https://nexaaudit-frontend.vercel.app/) 
-[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
-[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Lovable AI](https://img.shields.io/badge/Lovable_AI-000000?style=for-the-badge&logo=sparkle&logoColor=white)](https://lovable.dev/)
+<p align="left">
+  <img src="https://cdn.simpleicons.org/react/61DAFB" height="48" alt="React" /> &nbsp;&nbsp;
+  <img src="https://raw.githubusercontent.com/vitejs/vite/main/docs/public/logo.svg" height="48" alt="Vite" title="Vite" /> &nbsp;&nbsp;
+  <img src="https://cdn.simpleicons.org/tailwindcss/06B6D4" height="48" alt="Tailwind CSS" /> &nbsp;&nbsp;
+  <img src="https://lovable.dev/favicon.svg" height="48" alt="Lovable AI" title="Lovable AI" /> &nbsp;&nbsp;
+</p>
 
 This is the client-facing dashboard for **[NexaAudit](https://github.com/NisargKumarGharde/nexaaudit)**, an AI-powered financial fraud detection engine. 
 
