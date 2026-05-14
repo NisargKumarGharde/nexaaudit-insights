@@ -7,6 +7,8 @@
   <img src="https://lovable.dev/favicon.svg" height="48" alt="Lovable AI" title="Lovable AI" /> &nbsp;&nbsp;
 </p>
 
+![NexaAudit Dashboard Preview](./assets/dashboard-preview.png)
+
 This is the client-facing dashboard for **[NexaAudit](https://github.com/NisargKumarGharde/nexaaudit)**, an AI-powered financial fraud detection engine. 
 
 ---
